@@ -1,6 +1,6 @@
 # Local verification, 2026-08-30
 
-This is an independent synthetic application proof. It has not been published. Public deployment requires Sebastian's separate approval.
+This is an independent synthetic application proof. Sebastian approved public publication on August 30, 2026. The public package was verified against the tested local bytes.
 
 - Nine automated workflow tests pass: approval requirement, missing-data blocks, revision invalidation, unchanged-input behavior, safe retry, duplicate prevention, export accuracy, reset, and whitespace validation.
 - TypeScript and the Vite production build pass. The final source was rebuilt in a temporary directory after the workspace build stalled. Source equality was checked before copying the package back.
@@ -12,3 +12,7 @@ This is an independent synthetic application proof. It has not been published. P
 - Reset and refresh clear scenario data. Text export is a local download. Counts are scenario state, never estimated ROI.
 
 Package SHA-256: `4972f5e688941aa9a276ff04fcdbeec4f6781e57e6f914b7b36108a777a416d2`.
+
+## Public verification, 2026-08-30
+
+GitHub Pages deployed the approved artifact from `main/docs`. HTTPS returned 200; public bytes exactly match the local tested package and the SHA-256 above. Source publication contains only the synthetic proof and its development/QA files, not private application documents or contact/address data.
