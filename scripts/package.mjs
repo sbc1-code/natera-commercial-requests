@@ -1,0 +1,17 @@
+import { mkdir, readFile, writeFile } from 'node:fs/promises'
+import { resolve } from 'node:path'
+const root = resolve(import.meta.dirname, '..')
+let html = await readFile(resolve(root, 'dist/index.html'), 'utf8')
+const scriptMatch = html.match(/<script type="module" crossorigin src="([^"]+)"><\/script>/)
+const styleMatch = html.match(/<link rel="stylesheet" crossorigin href="([^"]+)">/)
+if (!scriptMatch || !styleMatch) throw new Error('Expected one Vite script and stylesheet')
+const assetPath = value => resolve(root, 'dist', value.replace(/^\.\//, '').replace(/^\//, ''))
+const script = (await readFile(assetPath(scriptMatch[1]), 'utf8')).replaceAll('</script', '<\\/script')
+const style = await readFile(assetPath(styleMatch[1]), 'utf8')
+html = html.replace(styleMatch[0], () => '<style>' + style + '</style>').replace(scriptMatch[0], () => '<script type="module">' + script + '</script>')
+if (/<script[^>]+src=|<link[^>]+stylesheet/.test(html)) throw new Error('External dependency remains')
+if (!html.includes("connect-src 'none'")) throw new Error('Network boundary is missing')
+await mkdir(resolve(root, 'docs'), {recursive:true})
+await writeFile(resolve(root, 'docs/index.html'), html)
+await writeFile(resolve(root, 'docs/.nojekyll'), '')
+console.log('Packaged one self-contained HTML file: ' + Buffer.byteLength(html) + ' bytes')
